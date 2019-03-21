@@ -160,6 +160,7 @@ const char *Triple::getOSTypeName(OSType Kind) {
   case CUDA: return "cuda";
   case NVCL: return "nvcl";
   case AMDHSA: return "amdhsa";
+  case GLSL: return "glsl";
   }
 
   llvm_unreachable("Invalid OSType");
@@ -362,6 +363,7 @@ static Triple::OSType parseOS(StringRef OSName) {
     .StartsWith("cuda", Triple::CUDA)
     .StartsWith("nvcl", Triple::NVCL)
     .StartsWith("amdhsa", Triple::AMDHSA)
+    .StartsWith("glsl", Triple::GLSL)
     .Default(Triple::UnknownOS);
 }
 
