@@ -652,6 +652,21 @@ LLVMToSPIRV::transFunctionDecl(Function *F) {
   BF->setFunctionControlMask(transFunctionControlMask(F));
   if (F->hasName())
     BM->setName(BF, F->getName());
+
+  Triple triple(M->getTargetTriple());
+  if(F->getName() == "main" && triple.getOS() == Triple::GLSL)
+  {
+      std::string env = triple.getEnvironmentName();
+      ExecutionModel model =
+          env == "vertex" ? ExecutionModelVertex :
+          env == "fragment" ? ExecutionModelFragment :
+          env == "tessctrl" ? ExecutionModelTessellationControl :
+          env == "tesseval" ? ExecutionModelTessellationEvaluation :
+          env == "compute" ? ExecutionModelGLCompute :
+          env == "geometry" ? ExecutionModelGeometry :
+          ExecutionModelMax;
+      BM->addEntryPoint(model, BF->getId());
+  }
   if (oclIsKernel(F))
     BM->addEntryPoint(ExecutionModelKernel, BF->getId());
   else if (F->getLinkage() != GlobalValue::InternalLinkage)
