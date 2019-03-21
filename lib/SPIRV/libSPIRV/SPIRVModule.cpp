@@ -70,8 +70,6 @@ public:
     SrcLangVer(102000) {
     AddrModel = sizeof(size_t) == 32 ? AddressingModelPhysical32
         : AddressingModelPhysical64;
-    // OpenCL memory model requires Kernel capability
-    setMemoryModel(MemoryModelOpenCL);
   }
   virtual ~SPIRVModuleImpl();
 

@@ -187,6 +187,10 @@ enum SPIRAddressSpace {
   SPIRAS_Constant,
   SPIRAS_Local,
   SPIRAS_Generic,
+  SPIRAS_Input,
+  SPIRAS_Output,
+  SPIRAS_Uniform,
+  SPIRAS_Buffer,
   SPIRAS_Count,
 };
 
@@ -197,6 +201,10 @@ SPIRVMap<SPIRAddressSpace, std::string>::init() {
   add(SPIRAS_Constant, "Constant");
   add(SPIRAS_Local, "Local");
   add(SPIRAS_Generic, "Generic");
+  add(SPIRAS_Input, "Input");
+  add(SPIRAS_Output, "Output");
+  add(SPIRAS_Uniform, "UniformConstant");
+  add(SPIRAS_Buffer, "Uniform");
 }
 typedef SPIRVMap<SPIRAddressSpace, SPIRVStorageClassKind>
   SPIRAddrSpaceCapitalizedNameMap;
@@ -208,6 +216,10 @@ SPIRVMap<SPIRAddressSpace, SPIRVStorageClassKind>::init() {
   add(SPIRAS_Constant, StorageClassUniformConstant);
   add(SPIRAS_Local, StorageClassWorkgroup);
   add(SPIRAS_Generic, StorageClassGeneric);
+  add(SPIRAS_Input, StorageClassInput);
+  add(SPIRAS_Output, StorageClassOutput);
+  add(SPIRAS_Uniform, StorageClassUniformConstant);
+  add(SPIRAS_Buffer, StorageClassUniform);
 }
 typedef SPIRVMap<SPIRAddressSpace, SPIRVStorageClassKind> SPIRSPIRVAddrSpaceMap;
 

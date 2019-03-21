@@ -119,13 +119,22 @@ TransOCLMD::visit(Module *M) {
 
   Triple TT(M->getTargetTriple());
   auto Arch = TT.getArch();
+  const bool isGLSL = TT.getOS() == Triple::GLSL;
   assert((Arch == Triple::spir || Arch == Triple::spir64) && "Invalid triple");
-  B.addNamedMD(kSPIRVMD::MemoryModel)
-      .addOp()
-        .add(Arch == Triple::spir ? spv::AddressingModelPhysical32 :
-            AddressingModelPhysical64)
-        .add(spv::MemoryModelOpenCL)
-        .done();
+  if(isGLSL) {
+      B.addNamedMD(kSPIRVMD::MemoryModel)
+          .addOp()
+          .add(spv::AddressingModelLogical)
+          .add(spv::MemoryModelGLSL450)
+          .done();
+  } else {
+      B.addNamedMD(kSPIRVMD::MemoryModel)
+          .addOp()
+          .add(Arch == Triple::spir ? spv::AddressingModelPhysical32 :
+               AddressingModelPhysical64)
+          .add(spv::MemoryModelOpenCL)
+          .done();
+  }
 
   // Add extensions
   auto Exts = getNamedMDAsStringSet(M, kSPIR2MD::Extensions);

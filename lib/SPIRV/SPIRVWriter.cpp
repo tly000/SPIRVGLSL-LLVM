@@ -1178,6 +1178,11 @@ LLVMToSPIRV::transDecoration(Value *V, SPIRVValue *BV) {
 
 bool
 LLVMToSPIRV::transAlign(Value *V, SPIRVValue *BV) {
+  if (BM->getMemoryModel() == MemoryModelGLSL450)
+  {
+      std::cout << "skipping alignment" << std::endl;
+      return true;
+  }
   if (auto AL = dyn_cast<AllocaInst>(V)) {
     BM->setAlignment(BV, AL->getAlignment());
     return true;
@@ -1373,12 +1378,19 @@ LLVMToSPIRV::transAddressingMode() {
       InvalidTargetTriple,
       "Actual target triple is " + M->getTargetTriple());
 
-  if (Arch == Triple::spir)
-    BM->setAddressingModel(AddressingModelPhysical32);
-  else
-    BM->setAddressingModel(AddressingModelPhysical64);
-  // Physical addressing model requires Addresses capability
-  BM->addCapability(CapabilityAddresses);
+  const bool isGLSL = TargetTriple.getOS() == Triple::GLSL;
+  if (isGLSL) {
+    BM->setAddressingModel(AddressingModelLogical);
+    BM->setMemoryModel(MemoryModelGLSL450);
+  } else{
+    if (Arch == Triple::spir)
+      BM->setAddressingModel(AddressingModelPhysical32);
+    else
+      BM->setAddressingModel(AddressingModelPhysical64);
+    // Physical addressing model requires Addresses capability
+    BM->addCapability(CapabilityAddresses);
+    BM->setMemoryModel(MemoryModelOpenCL);
+  }
   return true;
 }
 std::vector<SPIRVValue*>

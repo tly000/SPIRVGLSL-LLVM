@@ -1868,6 +1868,7 @@ public:
     setHasNoType();
   }
   SPIRVCapVec getRequiredCapability() const override {
+    std::cout << "SPIRVLifetime::getRequiredCapability()" << std::endl;
     return getVec(CapabilityKernel);
   }
   SPIRVValue *getObject() { return getValue(Object); };
