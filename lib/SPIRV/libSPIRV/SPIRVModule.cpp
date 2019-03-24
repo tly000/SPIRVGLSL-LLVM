@@ -1228,7 +1228,11 @@ SPIRVModuleImpl::addVariable(SPIRVType *Type, bool IsConstant,
   add(Variable);
   if (LinkageType != LinkageTypeInternal)
     Variable->setLinkageType(LinkageType);
-  Variable->setIsConstant(IsConstant);
+  Variable->setIsConstant(
+      StorageClass != StorageClassUniformConstant &&
+      StorageClass != StorageClassInput &&
+      StorageClass != StorageClassOutput &&
+      IsConstant);
   return Variable;
 }
 
