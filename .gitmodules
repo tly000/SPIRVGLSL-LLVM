@@ -1,0 +1,3 @@
+[submodule "SPIRGLSL-clang"]
+    path = tools/clang
+    url = https://github.com/tly000/SPIRGLSL-clang
